@@ -18,6 +18,14 @@ const Main = React.createClass({
   },
 
   loadBeers(searchTerm = 'hops') {
+    // first check if we can pull from localStorage
+    const localStorageBeers = localStorage.getItem(`search-${searchTerm}`);
+    if (localStorageBeers) {
+      const localBeers = JSON.parse(localStorageBeers);
+      this.setState({beers: localBeers});
+      return;
+    }
+
     fetch(`http://api.react.beer/v2/search?q=${searchTerm}&type=beer`)
     // when the data comes back convert it to json
     .then(data => data.json())
@@ -26,6 +34,9 @@ const Main = React.createClass({
       // filter for beers with images
       const filteredBeers = beers.data.filter(beer => !!beer.labels);
       this.setState({ beers: filteredBeers });
+
+      // save them to localStorage
+      localStorage.setItem(`search-${searchTerm}`, JSON.stringify(filteredBeers));
     })
     .catch(err => console.error(err));
   },
