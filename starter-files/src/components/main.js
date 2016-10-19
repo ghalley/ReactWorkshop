@@ -6,7 +6,8 @@ const Main = React.createClass({
   getInitialState() {
     return {
       numBeers : 10,
-      beers: []
+      beers: [],
+      loading: true
     }
   },
 
@@ -18,11 +19,15 @@ const Main = React.createClass({
   },
 
   loadBeers(searchTerm = 'hops') {
+    this.setState({ loading: true });
     // first check if we can pull from localStorage
     const localStorageBeers = localStorage.getItem(`search-${searchTerm}`);
     if (localStorageBeers) {
       const localBeers = JSON.parse(localStorageBeers);
-      this.setState({beers: localBeers});
+      this.setState({
+        beers: localBeers,
+        loading: false
+      });
       return;
     }
 
@@ -33,7 +38,10 @@ const Main = React.createClass({
     .then((beers) => {
       // filter for beers with images
       const filteredBeers = beers.data.filter(beer => !!beer.labels);
-      this.setState({ beers: filteredBeers });
+      this.setState({ 
+        beers: filteredBeers,
+        loading: false
+      });
 
       // save them to localStorage
       localStorage.setItem(`search-${searchTerm}`, JSON.stringify(filteredBeers));
