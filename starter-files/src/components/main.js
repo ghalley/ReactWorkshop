@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './header'
+import Results from './results'
 
 const Main = React.createClass({
   getInitialState() {
@@ -22,8 +23,6 @@ const Main = React.createClass({
     .then(data => data.json())
     // when the data is converted, put it in state
     .then((beers) => {
-      console.log(beers)
-
       // filter for beers with images
       const filteredBeers = beers.data.filter(beer => !!beer.labels);
       this.setState({ beers: filteredBeers });
@@ -44,6 +43,7 @@ const Main = React.createClass({
         <br/>
         <br/>
         <button onClick={this.incrementBeers}>{this.state.numBeers} 🍺</button>
+        <Results {...this.state} />
       </div>
     )
   }
