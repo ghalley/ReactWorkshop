@@ -1,5 +1,7 @@
 import React from 'react';
 import Header from './header'
+import Results from './results'
+import Single from './single'
 
 const Main = React.createClass({
   render () {
