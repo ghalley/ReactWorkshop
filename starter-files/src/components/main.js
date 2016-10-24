@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './header'
 import Results from './results'
+import Search from './search'
 
 const Main = React.createClass({
   getInitialState() {
@@ -38,7 +39,7 @@ const Main = React.createClass({
     .then((beers) => {
       // filter for beers with images
       const filteredBeers = beers.data.filter(beer => !!beer.labels);
-      this.setState({ 
+      this.setState({
         beers: filteredBeers,
         loading: false
       });
@@ -50,7 +51,9 @@ const Main = React.createClass({
   },
 
   componentWillMount() {
-    this.loadBeers();
+    const params = this.props.params || {};
+    const searchTerm = params.searchTerm || undefined;
+    this.loadBeers(searchTerm);
   },
 
   render () {
@@ -62,6 +65,7 @@ const Main = React.createClass({
         <br/>
         <br/>
         <button onClick={this.incrementBeers}>{this.state.numBeers} 🍺</button>
+        <Search />
         <Results {...this.state} />
       </div>
     )
